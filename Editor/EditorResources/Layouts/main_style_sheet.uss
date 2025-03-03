@@ -1,0 +1,63 @@
+.mButton {
+    flex-grow: 0;
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    background-color: rgb(88, 88, 88);
+    border-left-color: rgb(88, 88, 88);
+    border-right-color: rgb(88, 88, 88);
+    border-top-color: rgb(88, 88, 88);
+    border-bottom-color: rgb(88, 88, 88);
+    -unity-background-image-tint-color: rgb(215, 215, 215);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    flex-direction: column;
+    margin-top: 3px;
+    margin-right: 0;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    transition-duration: 0.1s;
+}
+
+.mButton:hover {
+    background-color: rgb(113, 93, 85);
+    -unity-background-image-tint-color: rgb(207, 135, 112);
+    border-left-color: rgb(113, 93, 85);
+    border-right-color: rgb(113, 93, 85);
+    border-top-color: rgb(113, 93, 85);
+    border-bottom-color: rgb(113, 93, 85);
+}
+
+.mButton:active {
+    background-color: rgb(238, 70, 42);
+    border-left-color: rgb(238, 69, 41);
+    border-right-color: rgb(238, 69, 41);
+    border-top-color: rgb(238, 69, 41);
+    border-bottom-color: rgb(238, 69, 41);
+}
+
+.mButton.Enabled {
+    border-left-color: rgb(236, 83, 53);
+    border-right-color: rgb(236, 83, 53);
+    border-top-color: rgb(236, 83, 53);
+    border-bottom-color: rgb(236, 83, 53);
+}
+
+.mButton.Main.Enabled {
+    background-color: rgb(236, 82, 52);
+}
+
+.mButton.Sub.Enabled {
+    -unity-background-image-tint-color: rgb(255, 202, 129);
+}
+
+.mButton.Disabled {
+    background-color: rgb(41, 41, 41);
+    border-left-color: rgb(41, 41, 41);
+    border-right-color: rgb(41, 41, 41);
+    border-top-color: rgb(41, 41, 41);
+    border-bottom-color: rgb(41, 41, 41);
+    -unity-background-image-tint-color: rgb(113, 113, 113);
+}
