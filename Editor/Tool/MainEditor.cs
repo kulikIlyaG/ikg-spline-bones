@@ -78,7 +78,7 @@ namespace IKGTools.SplineBones.Editor
             OnStartEdit?.Invoke(_data);
         }
         
-        public static bool IsEdit => _data != null && _data.BindingsData != null;
+        public static bool IsEdit => _data != null && _data.BindingsData != null && !Application.isPlaying;
 
         public static void StopEdit()
         {
