@@ -9,6 +9,8 @@
     "name": "Ilya Kulik",
     "url": "https://github.com/yourname"
   },
-  "dependencies": {},
+  "dependencies": {
+    "com.unity.2d.spriteshape": "8.0.0"
+  },
   "keywords": ["unity", "tool", "editor", "spline", "rig"]
 }
