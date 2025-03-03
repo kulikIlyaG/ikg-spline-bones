@@ -4,7 +4,7 @@ namespace IKGTools.SplineBones.Editor
     {
         public static string GetPathFor(string filePath)
         {
-            return $"Packages/com.splinebones.ikg/Editor/EditorResources/{filePath}";
+            return $"Packages/com.ikg.spline-bones/Editor/EditorResources/{filePath}";
         }
 
         public static string GetPathForEditorTexture(string texturePath)
