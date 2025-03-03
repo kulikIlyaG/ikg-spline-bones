@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Packages/com.splineBones.ikg/EditorResources/Layouts/main_style_sheet.uss?fileID=7433441132597879392&amp;guid=47cc9b793e7b04956876b1d552ebdfc1&amp;type=3#main_style_sheet" />
+    <Style src="project://database/Packages/com.ikg.spline-bones/EditorResources/Layouts/main_style_sheet.uss?fileID=7433441132597879392&amp;guid=47cc9b793e7b04956876b1d552ebdfc1&amp;type=3#main_style_sheet" />
     <ui:VisualElement name="content" style="flex-grow: 0; flex-direction: row; height: 28px; justify-content: flex-start; align-self: center;">
-        <ui:Button name="spline_edit" class="mButton Main" style="background-image: url(&quot;project://database/Assets/Packages/com.splineBones.ikg/EditorResources/Textures/spline_icon.png?fileID=2800000&amp;guid=719d4e343e58a471ab369030ffb40eb1&amp;type=3#spline_icon&quot;);" />
-        <ui:Button name="skeleton_edit" class="mButton Main" style="background-image: url(&quot;project://database/Assets/Packages/com.splineBones.ikg/EditorResources/Textures/bone_icon.png?fileID=2800000&amp;guid=45a165cfa74c44c9ba9a33cb4844147d&amp;type=3#bone_icon&quot;);" />
+        <ui:Button name="spline_edit" class="mButton Main" style="background-image: url(&quot;project://database/Packages/com.ikg.spline-bones/Editor/EditorResources/Textures/spline_icon.png?fileID=2800000&amp;guid=719d4e343e58a471ab369030ffb40eb1&amp;type=3#spline_icon&quot;);" />
+        <ui:Button name="skeleton_edit" class="mButton Main" style="background-image: url(&quot;project://database/Packages/com.ikg.spline-bones/Editor/EditorResources/Textures/bone_icon.png?fileID=2800000&amp;guid=45a165cfa74c44c9ba9a33cb4844147d&amp;type=3#bone_icon&quot;);" />
         <ui:VisualElement name="rig_edit_container" style="flex-grow: 1; flex-direction: row;">
-            <ui:Button name="add_bone" class="mButton Sub" style="background-image: url(&quot;project://database/Assets/Packages/com.splineBones.ikg/EditorResources/Textures/add_bone_icon.png?fileID=2800000&amp;guid=0a0ab7faf1115458b9fcf7fcf9b6c116&amp;type=3#add_bone_icon&quot;);" />
-            <ui:Button name="remove_bone" class="mButton Sub" style="background-image: url(&quot;project://database/Assets/Packages/com.splineBones.ikg/EditorResources/Textures/remove_bone_icon.png?fileID=2800000&amp;guid=804aa7fe98fc34bab8358a412b98646f&amp;type=3#remove_bone_icon&quot;);" />
+            <ui:Button name="add_bone" class="mButton Sub" style="background-image: url(&quot;project://database/Packages/com.ikg.spline-bones/Editor/EditorResources/Textures/add_bone_icon.png?fileID=2800000&amp;guid=0a0ab7faf1115458b9fcf7fcf9b6c116&amp;type=3#add_bone_icon&quot;);" />
+            <ui:Button name="remove_bone" class="mButton Sub" style="background-image: url(&quot;project://database/Packages/com.ikg.spline-bones/Editor/EditorResources/Textures/remove_bone_icon.png?fileID=2800000&amp;guid=804aa7fe98fc34bab8358a412b98646f&amp;type=3#remove_bone_icon&quot;);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
