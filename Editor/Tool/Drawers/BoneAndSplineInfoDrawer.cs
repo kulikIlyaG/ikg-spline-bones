@@ -54,6 +54,9 @@ namespace IKGTools.SplineBones.Editor
 
         private void OnUpdatedSceneGUI(SceneView obj)
         {
+            if(Application.isPlaying)
+                return;
+            
             Draw();
         }
 
@@ -91,6 +94,9 @@ namespace IKGTools.SplineBones.Editor
             int pointsCount = _spline.GetPointCount();
             for (int index = 0; index < pointsCount; index++)
             {
+                if(_skeleton == null)
+                    break;
+
                 Vector3 point = _spline.GetPosition(index);
                 Vector3 leftTangents = point + _spline.GetLeftTangent(index);
                 Vector3 rightTangents = point + _spline.GetRightTangent(index);
@@ -113,6 +119,8 @@ namespace IKGTools.SplineBones.Editor
             int pointsCount = _spline.GetPointCount();
             for (int index = 0; index < pointsCount; index++)
             {
+                if(_skeleton == null)
+                    break;
                 Vector3 pointPosition = _skeleton.transform.TransformPoint(_spline.GetPosition(index));
                     
                 string pointName = $"point_{index:000}";
