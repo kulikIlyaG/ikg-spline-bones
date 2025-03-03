@@ -34,12 +34,13 @@ namespace IKGTools.SplineBones.Editor
             {
                 Vector2 mousePosition = evnt.mousePosition;
                 _clickPosition = GetWorldPosition(sceneView, mousePosition);
-                EditorUtility.DisplayPopupMenu(new Rect(mousePosition, new Vector2(100, 100)), "RiggedSplineContextMenu", null);
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Create bone"), false, CreateBoneContextCommand);
+                menu.ShowAsContext();
                 evnt.Use();
             }
         }
         
-        [MenuItem("RiggedSplineContextMenu/Create bone")]
         private static void CreateBoneContextCommand()
         {
             _rigEditor.AddBone(_clickPosition);
