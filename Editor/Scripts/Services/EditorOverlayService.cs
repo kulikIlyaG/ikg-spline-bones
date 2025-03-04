@@ -63,6 +63,12 @@ namespace IKGTools.Editor.Services
                 _overlay.ResetButtons();
         }
 
+        public void ResetActiveEditButtons()
+        {
+            if(_overlay.IsVisible())
+                _overlay.ResetEditButtons();
+        }
+
         public void SetActiveSplineButton()
         {
             if (_overlay.IsVisible())
@@ -115,5 +121,6 @@ namespace IKGTools.Editor.Services
         void SetActiveAddBoneButton();
         void SetActiveRemoveBoneButton();
         void ResetButtons();
+        void ResetEditButtons();
     }
 }

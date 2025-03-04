@@ -1,5 +1,4 @@
 using System;
-using IKGTools.Editor;
 using IKGTools.Editor.EasyContainer;
 using IKGTools.Editor.Services;
 using IKGTools.Editor.Utilities;
@@ -20,7 +19,7 @@ namespace IKGTools.SplineBones.Editor
 
         private Button _addBone;
         private Button _removeBone;
-        
+
         public event Action OnClickEditSpline;
         public event Action OnClickEditRig;
         public event Action OnClickAddBone;
@@ -71,6 +70,12 @@ namespace IKGTools.SplineBones.Editor
 
             _buttonSplineEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
             _buttonRigEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+        }
+
+        void IEditorOverlay.ResetEditButtons()
+        {
+            _addBone.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+            _removeBone.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
         }
 
         public override void OnCreated()

@@ -30,6 +30,7 @@ namespace IKGTools.Editor.Services.States
             _boneTransformControllersDrawer.OnUpdatedBoneTransforms += BakeNewBoneTransforms;
 
             _overlayService.SetActiveRigEditButtons();
+            _overlayService.ResetActiveEditButtons();
         }
         
         protected override void OnTickSceneGUI(SceneView sceneView)
