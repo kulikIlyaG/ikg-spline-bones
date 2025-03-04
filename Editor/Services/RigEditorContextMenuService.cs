@@ -1,34 +1,32 @@
+using IKGTools.Editor.EasyContainerEditor;
 using UnityEditor;
 using UnityEngine;
 
-namespace IKGTools.SplineBones.Editor
+namespace IKGTools.Editor.Services
 {
-    [InitializeOnLoad]
-    internal static class RigContextMenu
+    internal sealed class RigEditorContextMenuService : ITickableSceneGUI
     {
-        private static Vector2 _clickPosition;
-        private static RigEditor _rigEditor;
-        
-        static RigContextMenu()
+        private bool _isEnabled = false;
+
+        private Vector2 _clickPosition;
+
+        public void SetEnabled()
         {
-            SceneView.duringSceneGui += OnSceneGUI;
+            _isEnabled = true;
         }
 
-        public static void SetRigEditor(RigEditor rigEditor)
+        public void SetDisabled()
         {
-            _rigEditor = rigEditor;
+            _isEnabled = false;
         }
 
-        public static void RemoveRigEditor()
+        public void TickSceneGUI(SceneView sceneView)
         {
-            _rigEditor = null;
-        }
-        
-        private static void OnSceneGUI(SceneView sceneView)
-        {
-            if(_rigEditor == null)
+            if (!_isEnabled)
+            {
                 return;
-            
+            }
+
             Event evnt = Event.current;
             if (evnt != null && evnt.type == EventType.ContextClick)
             {
@@ -40,12 +38,12 @@ namespace IKGTools.SplineBones.Editor
                 evnt.Use();
             }
         }
-        
+
         private static void CreateBoneContextCommand()
         {
-            _rigEditor.AddBone(_clickPosition);
+            Debug.Log("Context menu add button pressed");
         }
-        
+
         private static Vector2 GetWorldPosition(SceneView sceneView, Vector2 screenPosition)
         {
             screenPosition.y = sceneView.camera.pixelHeight - screenPosition.y;
@@ -55,7 +53,7 @@ namespace IKGTools.SplineBones.Editor
             Plane plane = new Plane(-Vector3.forward, Vector3.zero);
 
             if (plane.Raycast(ray, out float distance))
-                return ray.GetPoint(distance); 
+                return ray.GetPoint(distance);
 
             return Vector3.zero;
         }

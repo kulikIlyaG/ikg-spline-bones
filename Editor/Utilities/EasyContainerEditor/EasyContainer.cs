@@ -26,5 +26,10 @@ namespace IKGTools.Editor.EasyContainerEditor
         {
             return _rootContainer.Resolve<T>();
         }
+
+        public static void Register<T>(T instance)
+        {
+            _rootContainer.Register(instance);
+        }
     }
 }

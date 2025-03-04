@@ -6,12 +6,18 @@ namespace IKGTools.SplineBones.Editor
     internal abstract class BaseTransientOverlay : Overlay, ITransientOverlay
     {
         private bool _isInitialized = false;
+        private bool _isVisible = false;
 
         public bool IsInitialized => _isInitialized;
         
         public bool visible => IsVisible();
-        
-        protected abstract bool IsVisible();
+
+        public virtual bool IsVisible() => _isVisible;
+
+        public void SetVisible(bool visible)
+        {
+            _isVisible = visible;
+        }
         
         protected abstract VisualElement CreateUIElements();
         protected virtual void InitializeProcess(){}

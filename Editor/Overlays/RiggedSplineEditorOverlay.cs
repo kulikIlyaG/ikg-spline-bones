@@ -1,3 +1,6 @@
+using System;
+using IKGTools.Editor.EasyContainerEditor;
+using IKGTools.Editor.Services;
 using IKGTools.SplineBones.Editor.Utilities.UIToolkit;
 using UnityEditor;
 using UnityEditor.Overlays;
@@ -7,17 +10,71 @@ using UnityEngine.UIElements;
 namespace IKGTools.SplineBones.Editor
 {
     [Overlay(typeof(SceneView), "Spline Bones Binding")]
-    internal class RiggedSplineEditorOverlay : BaseTransientOverlay
+    internal class RiggedSplineEditorOverlay : BaseTransientOverlay, IEditorOverlay
     {
         private Button _buttonSplineEdit;
         private Button _buttonRigEdit;
+
+        private Button _addBone;
+        private Button _removeBone;
         
-        private Button _buttonAddBone;
-        private Button _buttonRemoveBone;
+        public event Action OnClickEditSpline;
+        public event Action OnClickEditRig;
+        public event Action OnClickAddBone;
+        public event Action OnClickRemoveBone;
 
-        private RigEditModeOverlayExecutor _rigEditModeOverlayExecutor;
+        void IEditorOverlay.SetActiveSplineButton()
+        {
+            _buttonSplineEdit.TryAddClass(USSClassKeys.BUTTON_ENABLED);
+            _buttonRigEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+        }
 
-        protected override bool IsVisible() => MainEditor.IsEdit;
+        void IEditorOverlay.SetActiveRigButton()
+        {
+            _buttonSplineEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+            _buttonRigEdit.TryAddClass(USSClassKeys.BUTTON_ENABLED);
+        }
+
+        void IEditorOverlay.SetInteractableRigEditButtons(bool interactable)
+        {
+            if (interactable)
+            {
+                _addBone.TryRemoveClass(USSClassKeys.BUTTON_DISABLED);
+                _removeBone.TryRemoveClass(USSClassKeys.BUTTON_DISABLED);
+            }
+            else
+            {
+                _addBone.TryAddClass(USSClassKeys.BUTTON_DISABLED);
+                _removeBone.TryAddClass(USSClassKeys.BUTTON_DISABLED);
+            }
+        }
+
+        void IEditorOverlay.SetActiveAddBoneButton()
+        {
+            _addBone.TryAddClass(USSClassKeys.BUTTON_ENABLED);
+            _removeBone.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+        }
+
+        void IEditorOverlay.SetActiveRemoveBoneButton()
+        {
+            _addBone.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+            _removeBone.TryAddClass(USSClassKeys.BUTTON_ENABLED);
+        }
+
+        void IEditorOverlay.ResetButtons()
+        {
+            _addBone.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+            _removeBone.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+
+            _buttonSplineEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+            _buttonRigEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
+        }
+
+        public override void OnCreated()
+        {
+            EasyContainer.Resolve<EditorOverlayService>().SetOverlayInstance(this);
+            base.OnCreated();
+        }
 
         protected override VisualElement CreateUIElements()
         {
@@ -29,148 +86,43 @@ namespace IKGTools.SplineBones.Editor
                 Debug.Log($"Not found UXML for Spline Bones Overlay({path})");
                 return new VisualElement();
             }
-            
+
             var result = container.Instantiate().contentContainer;
 
             _buttonSplineEdit = result.Q<Button>("spline_edit");
             _buttonRigEdit = result.Q<Button>("skeleton_edit");
-            _buttonAddBone = result.Q<Button>("add_bone");
-            _buttonRemoveBone = result.Q<Button>("remove_bone");
+            _addBone = result.Q<Button>("add_bone");
+            _removeBone = result.Q<Button>("remove_bone");
 
             _buttonSplineEdit.clicked += OnClickSplineEdit;
             _buttonRigEdit.clicked += OnClickRigEdit;
-            
+
+            _addBone.clicked += OnClickAddBoneEdit;
+            _removeBone.clicked += OnClickRemoveBoneEdit;
             return result;
         }
 
-        protected override void OnBeforeShow()
-        {
-            ResetView();
-        }
-
-        protected override void InitializeProcess()
-        {
-            base.InitializeProcess();
-            
-            MainEditor.OnStartEdit += OnStartEdit;
-            MainEditor.OnStopEdit += OnStopEdit;
-        }
-
-
-        private void ResetView()
-        {
-            if (_rigEditModeOverlayExecutor != null)
-            {
-                _rigEditModeOverlayExecutor.Dispose();
-                _rigEditModeOverlayExecutor = null;
-            }
-            
-            if(_buttonAddBone == null)
-                return;
-            
-            _buttonAddBone!.TryAddClass(USSClassKeys.BUTTON_DISABLED);
-            _buttonRemoveBone!.TryAddClass(USSClassKeys.BUTTON_DISABLED);
-        }
-
-        private void OnStartEdit(Data data)
-        {
-            SubscribeToEvents();
-            ResetView();
-        }
-        
-        private void OnStopEdit()
-        {
-            if (_rigEditModeOverlayExecutor != null)
-            {
-                _rigEditModeOverlayExecutor!.Dispose();
-                _rigEditModeOverlayExecutor = null;
-            }
-
-            UnsubscribeFromEvents();
-            ResetView();
-        }
 
         private void OnClickRigEdit()
         {
-            if(MainEditor.CurrentMode != Data.EditMode.Rig)
-                MainEditor.Data.SetEditRigMode();
-            else 
-                MainEditor.Data.ResetEditMode();
+            OnClickEditRig?.Invoke();
         }
 
         private void OnClickSplineEdit()
         {
-            if(MainEditor.CurrentMode != Data.EditMode.Spline)
-                MainEditor.Data.SetEditSplineMode();
-            else 
-                MainEditor.Data.ResetEditMode();
+            OnClickEditSpline?.Invoke();
         }
 
-        private void OnResetEditMode()
+
+        private void OnClickRemoveBoneEdit()
         {
-            _buttonSplineEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
-            _buttonRigEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
-            
-            if (_rigEditModeOverlayExecutor != null)
-            {
-                _rigEditModeOverlayExecutor.Dispose();
-                _rigEditModeOverlayExecutor = null;
-                _buttonAddBone.TryAddClass(USSClassKeys.BUTTON_DISABLED);
-                _buttonRemoveBone.TryAddClass(USSClassKeys.BUTTON_DISABLED);
-            }
+            OnClickRemoveBone?.Invoke();
         }
 
-        private void OnEnabledSplineEditMode()
+        private void OnClickAddBoneEdit()
         {
-            _buttonSplineEdit.TryAddClass(USSClassKeys.BUTTON_ENABLED);
-            _buttonRigEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
-
-            if (_rigEditModeOverlayExecutor != null)
-            {
-                _rigEditModeOverlayExecutor.Dispose();
-                _rigEditModeOverlayExecutor = null;
-                _buttonAddBone.TryAddClass(USSClassKeys.BUTTON_DISABLED);
-                _buttonRemoveBone.TryAddClass(USSClassKeys.BUTTON_DISABLED);
-            }
+            OnClickAddBone?.Invoke();
         }
 
-        private void OnEnabledRigEditMode()
-        {
-            _buttonSplineEdit.TryRemoveClass(USSClassKeys.BUTTON_ENABLED);
-            _buttonRigEdit.TryAddClass(USSClassKeys.BUTTON_ENABLED);
-
-            if (_rigEditModeOverlayExecutor != null)
-            {
-                _rigEditModeOverlayExecutor.Dispose();
-                _rigEditModeOverlayExecutor = null;
-            }
-            _rigEditModeOverlayExecutor = new RigEditModeOverlayExecutor(MainEditor.RigEditor, _buttonAddBone, _buttonRemoveBone);
-            
-            _buttonAddBone.TryRemoveClass(USSClassKeys.BUTTON_DISABLED);
-            _buttonRemoveBone.TryRemoveClass(USSClassKeys.BUTTON_DISABLED);
-        }
-        
-
-        protected override void SubscribeToEvents()
-        {
-            var data = MainEditor.Data;
-            
-            if(data == null)
-                return;
-            
-            data.OnEnabledRigEditMode += OnEnabledRigEditMode;
-            data.OnEnabledSplineEditMode += OnEnabledSplineEditMode;
-            data.OnResetEditMode += OnResetEditMode;
-        }
-
-        protected override void UnsubscribeFromEvents()
-        {
-            var data = MainEditor.Data;
-            if(data == null)
-                return;
-            data.OnEnabledRigEditMode -= OnEnabledRigEditMode;
-            data.OnEnabledSplineEditMode -= OnEnabledSplineEditMode;
-            data.OnResetEditMode -= OnResetEditMode;
-        }
     }
 }

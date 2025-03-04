@@ -9,15 +9,18 @@ namespace IKGTools.SplineBones.Editor
         private readonly Color _backgroundColor;
         private readonly float _height;
 
-        public SceneBanner(Color backgroundColor, float height, GUIStyle labelStyle)
+        private readonly string _message;
+        
+        public SceneBanner(Color backgroundColor, float height, GUIStyle labelStyle, string message)
         {
             _labelStyle = labelStyle;
 
             _backgroundColor = backgroundColor;
             _height = height;
+            _message = message;
         }
 
-        public void Draw(SceneView sceneView, string text)
+        public void Draw(SceneView sceneView)
         {
             var screenRect = sceneView.position;
             var bannerHeight = _height;
@@ -36,7 +39,7 @@ namespace IKGTools.SplineBones.Editor
             EditorGUI.DrawRect(new Rect(0, 0, bannerRect.width, bannerRect.height), 
                 _backgroundColor);
 
-            EditorGUI.LabelField(new Rect(0, 0, bannerRect.width, bannerRect.height), text, _labelStyle);
+            EditorGUI.LabelField(new Rect(0, 0, bannerRect.width, bannerRect.height), _message, _labelStyle);
             Color oldColor = GUI.color;
             
         

@@ -7,17 +7,16 @@ using UnityEngine;
 
 namespace IKGTools.Editor.Services
 {
-    internal sealed class EditorLifeCycleEventsService
+    internal sealed class EditorLifeCycleEventsService : IInitializable
     {
         private readonly EditorDataService _dataService;
         
-        internal event Action OnStartEdit;
-        internal event Action OnStopEdit;
+        internal event Action OnEnabledEditor;
+        internal event Action OnDisabledEditor;
         
         internal event Action OnSelectedEditMode;
         internal event Action OnDeselectedEditMode;
 
-        [EasyInject]
         public EditorLifeCycleEventsService(EditorDataService dataService)
         {
             _dataService = dataService;
@@ -25,7 +24,19 @@ namespace IKGTools.Editor.Services
             Selection.selectionChanged += OnChangedSelections;
         }
         
+        public bool IsEditorEnabled { get; private set; }
+        
         private void OnChangedSelections()
+        {
+            CheckSelectedObjects();
+        }
+
+        public void Initialize()
+        {
+            CheckSelectedObjects();
+        }
+
+        private void CheckSelectedObjects()
         {
             if (_dataService.IsHasComponent)
             {
@@ -49,13 +60,15 @@ namespace IKGTools.Editor.Services
         private void StartEdit(SplineBonesComponent component)
         {
             _dataService.SetData(component);
-            OnStartEdit?.Invoke();
+            IsEditorEnabled = true;
+            OnEnabledEditor?.Invoke();
         }
 
         private void BreakEdit()
         {
             _dataService.ReleaseData();
-            OnStopEdit?.Invoke();
+            IsEditorEnabled = false;
+            OnDisabledEditor?.Invoke();
         }
 
         private void TryStartEdit()
@@ -75,5 +88,6 @@ namespace IKGTools.Editor.Services
             
             return result;
         }
+
     }
 }

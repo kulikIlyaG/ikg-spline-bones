@@ -2,14 +2,18 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Text;
 using IKGTools.Editor.EasyContainerEditor.Services;
 
 using UnityEditor;
+using UnityEngine;
 
 namespace IKGTools.Editor.EasyContainerEditor
 {
     public sealed class DIContainer
     {
+        private readonly int _containerIndex;
+        
         private readonly DIContainer _parentContainer;
         
         private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
@@ -18,27 +22,53 @@ namespace IKGTools.Editor.EasyContainerEditor
         private readonly HashSet<ITickable> _tickableInstances = new HashSet<ITickable>();
         private readonly HashSet<ITickableSceneGUI> _tickableSceneGUIInstances = new HashSet<ITickableSceneGUI>();
 
-        internal DIContainer() { }
-
-        internal DIContainer(DIContainer parent)
+        internal DIContainer()
         {
+            _containerIndex = 0;
+            Register(this);
+        }
+
+        private DIContainer(DIContainer parent)
+        {
+            _containerIndex = parent._containerIndex + 1;
             _parentContainer = parent;
-            var eventsHelper = _parentContainer.Resolve<ContainerEventsService>();
+            Register(this);
             
+            var eventsHelper = _parentContainer.Resolve<ContainerEventsService>();
             eventsHelper.OnTick += OnTick;
             eventsHelper.OnTickSceneGUI += OnTickSceneGUI;
         }
         
-        public void CreateAndRegister<T>()
+        public T CreateAndRegister<T>()
         {
             var instance = CreateInstance<T>();
             Register(instance);
+            return instance;
+        }
+
+        public object CreateAndRegister(Type type)
+        {
+            var instance = CreateInstance(type);
+            Register(type, instance);
+            return instance;
+        }
+
+        public void Register(Type type, object instance)
+        {
+            _instances[type] = instance;
+            
+            TryRegisterCallbackInstance(instance);
         }
 
         public void Register<T>(T instance)
         {
             _instances[typeof(T)] = instance;
-            
+
+            TryRegisterCallbackInstance(instance);
+        }
+
+        private void TryRegisterCallbackInstance<T>(T instance)
+        {
             if (instance is IInitializable instanceInitializable)
                 _initializableInstances.Add(instanceInitializable);
 
@@ -48,7 +78,7 @@ namespace IKGTools.Editor.EasyContainerEditor
             if (instance is ITickableSceneGUI instanceTickableSceneGUI)
                 _tickableSceneGUIInstances.Add(instanceTickableSceneGUI);
         }
-        
+
         public T Resolve<T>()
         {
             return (T)Resolve(typeof(T));
@@ -115,8 +145,28 @@ namespace IKGTools.Editor.EasyContainerEditor
         {
             foreach (IInitializable instance in _initializableInstances)
                 instance.Initialize();
+
+            ReportContainer();
         }
-        
+
+        private void ReportContainer()
+        {
+#if UNITY_EDITOR
+            StringBuilder report = new StringBuilder();
+            report.AppendLine($"Container(<color=#c25088>{_containerIndex:000}</color>) parentIndex: {(_parentContainer != null ? $"<color=#f1c232>{_parentContainer._containerIndex:000}</color>" : "<color=#e06666>NULL</color>")}");
+            report.AppendLine($"Registered(Count:<color=#3d85c6>{_instances.Count}</color>, <color=#5bb86b>Contract</color> : <color=#5BB899>Instance</color>)):");
+
+            int index = 1;
+            foreach (var instancePair in _instances)
+            {
+                report.AppendLine($"{index:000}. <color=#5bb86b>{instancePair.Key.Name}</color> : <color=#5BB899>{instancePair.Value}</color>");
+                index++;
+            }
+
+            Debug.Log(report.ToString());
+#endif
+        }
+
         private T CreateInstance<T>()
         {
             return (T)CreateInstance(typeof(T));
@@ -145,23 +195,15 @@ namespace IKGTools.Editor.EasyContainerEditor
         {
             var constructors = type
                 .GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(c => c.GetCustomAttribute<EasyInjectAttribute>() != null)
+                .OrderByDescending(c => c.GetParameters().Length)
                 .ToList();
-            
-            if (constructors.Count == 0)
-                return null;
-            
-            if (constructors.Count > 1)
-                throw new Exception($"Type {type.Name} has multiple constructors with the [EasyInject] attribute. Only one constructor can be marked for injection.");
-            
-            var constructor = constructors[0];
-            var injectAttribute = constructor.GetCustomAttribute<EasyInjectAttribute>();
-            
-            try
+
+            foreach (var constructor in constructors)
             {
                 var parameters = constructor.GetParameters();
                 var arguments = new object[parameters.Length];
-                
+                bool canResolveAll = true;
+
                 for (int i = 0; i < parameters.Length; i++)
                 {
                     var paramType = parameters[i].ParameterType;
@@ -169,21 +211,20 @@ namespace IKGTools.Editor.EasyContainerEditor
                     {
                         arguments[i] = Resolve(paramType);
                     }
-                    else if (!injectAttribute.Optional)
+                    else
                     {
-                        throw new Exception($"Parameter {parameters[i].Name} of constructor of type {type.Name} requires type {paramType.Name}, but it is not registered in the container.");
+                        canResolveAll = false;
+                        break;
                     }
                 }
-                
-                return constructor.Invoke(arguments);
+
+                if (canResolveAll)
+                {
+                    return constructor.Invoke(arguments);
+                }
             }
-            catch (Exception e)
-            {
-                if (!injectAttribute.Optional)
-                    throw new Exception($"Error creating instance of type {type.Name} via constructor with injection: {e.Message}");
-                
-                return null;
-            }
+    
+            throw new Exception($"No suitable constructor found for type {type.Name}. Ensure that all dependencies are registered.");
         }
 
         private void InjectInto(object instance)

@@ -23,6 +23,10 @@ namespace IKGTools.SplineBones.Editor
         public void Draw()
         {
             var bones = _skeleton.Bones;
+            
+            if(bones == null)
+                return;
+            
             var size = GetSizeByDistance(0.05f);
 
             for (int index = 0; index < bones.Length; index++)

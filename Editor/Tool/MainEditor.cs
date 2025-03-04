@@ -10,7 +10,6 @@ namespace IKGTools.SplineBones.Editor
         private static Data _data;
 
         private static RigEditor _rigEditor;
-        private static SplineEditor _splineEditor;
         private static BoneAndSplineInfoDrawer _boneAndSplineInfoDrawer;
         
         internal static Data Data => _data;
@@ -18,15 +17,14 @@ namespace IKGTools.SplineBones.Editor
 
         public static IRigEditor RigEditor => _rigEditor;
 
+        public static bool IsEdit => _data != null && _data.BindingsData != null && !Application.isPlaying;
         
         internal static Action<Data> OnStartEdit;
         internal static Action OnStopEdit;
-        internal static Action OnSelectedEditMode;
-        internal static Action OnDeselectedEditMode;
 
         static MainEditor()
         {
-            Selection.selectionChanged += OnChangedSelections;
+            //Selection.selectionChanged += OnChangedSelections;
         }
 
         private static void OnChangedSelections()
@@ -78,7 +76,6 @@ namespace IKGTools.SplineBones.Editor
             OnStartEdit?.Invoke(_data);
         }
         
-        public static bool IsEdit => _data != null && _data.BindingsData != null && !Application.isPlaying;
 
         public static void StopEdit()
         {
@@ -104,35 +101,20 @@ namespace IKGTools.SplineBones.Editor
 
         private static void OnEnabledRigEditModeInvoke()
         {
-            TryToDisposeSplineEditor();
-            
             _rigEditor = new RigEditor(_data);
-            OnSelectedEditMode?.Invoke();
         }
         
         private static void OnEnabledSplineEditMode()
         {
             TryToDisposeRigEditor();
             
-            _splineEditor = new SplineEditor();
-            OnSelectedEditMode?.Invoke();
         }
 
         private static void OnResetEditMode()
         {
             TryToDisposeRigEditor();
-            TryToDisposeSplineEditor();
-            OnDeselectedEditMode?.Invoke();
         }
 
-        private static void TryToDisposeSplineEditor()
-        {
-            if (_splineEditor != null)
-            {
-                _splineEditor.Dispose();
-                _splineEditor = null;
-            }
-        }
 
         private static void TryToDisposeRigEditor()
         {

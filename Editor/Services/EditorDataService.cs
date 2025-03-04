@@ -6,6 +6,7 @@ namespace IKGTools.Editor.Services
     internal sealed class EditorDataService
     {
         private SplineBonesComponent _component;
+        private bool _beforeEnterEditModeExecuteComponentValue;
         
         public event Action<SplineBonesComponent> OnSetData;
         public event Action OnReleaseComponent;
@@ -29,6 +30,23 @@ namespace IKGTools.Editor.Services
             
             _component = null;
             OnReleaseComponent?.Invoke();
+        }
+
+        public void TryStartExecute()
+        {
+            if (_beforeEnterEditModeExecuteComponentValue)
+            {
+                _component.RestartExecute();
+                _component.Execute = true;
+            }
+        }
+
+        public void TryStopExecuteComponent()
+        {
+            _beforeEnterEditModeExecuteComponentValue = _component.Execute;
+            
+            if(_beforeEnterEditModeExecuteComponentValue)
+                _component.Execute = false;
         }
     }
 }

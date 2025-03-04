@@ -1,4 +1,4 @@
-using IKGTools.SplineBones;
+using IKGTools.Editor;
 using IKGTools.SplineBones.Editor.Utilities.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -36,10 +36,10 @@ namespace IKGTools.SplineBones.Editor
             }
             
             EditorApplication.update += UpdateGUIItems;
-            MainEditor.OnSelectedEditMode += OnEnterToEditMode;
-            MainEditor.OnDeselectedEditMode += OnExitFromEditMode;
+            SplineBonesEditorRoot.OnSelectedEditMode += OnEnterToEditMode;
+            SplineBonesEditorRoot.OnDeselectedEditMode += OnExitFromEditMode;
         }
-
+        
 
         private void OnExitFromEditMode()
         {
@@ -55,14 +55,16 @@ namespace IKGTools.SplineBones.Editor
 
         private void TryValidateBonesInstance()
         {
-            RigEditor.TryUpdateBoneInstances(_skeleton, _splineBones.BindingsData.Bindings.SkeletonDefinition.GetBonesTransform());
+            SplineBonesEditorRoot.TryUpdateBoneInstances(_skeleton,
+                _splineBones.BindingsData.Bindings.SkeletonDefinition.GetBonesTransform());
+            //RigEditor.TryUpdateBoneInstances(_skeleton, _splineBones.BindingsData.Bindings.SkeletonDefinition.GetBonesTransform());
         }
 
         private void OnDisable()
         {
             EditorApplication.update -= UpdateGUIItems;
-            MainEditor.OnSelectedEditMode -= OnEnterToEditMode;
-            MainEditor.OnDeselectedEditMode -= OnExitFromEditMode;
+            SplineBonesEditorRoot.OnSelectedEditMode -= OnEnterToEditMode;
+            SplineBonesEditorRoot.OnDeselectedEditMode -= OnExitFromEditMode;
         }
 
 
