@@ -36,6 +36,7 @@ namespace IKGTools.SplineBones.Editor.Services.States
             GUIStyle bannerLabelStyle = new GUIStyle()
             {
                 alignment = TextAnchor.MiddleCenter,
+                fontStyle = FontStyle.Bold,
                 normal =
                 {
                     textColor = SCENE_BANNER_LABEL_COLOR

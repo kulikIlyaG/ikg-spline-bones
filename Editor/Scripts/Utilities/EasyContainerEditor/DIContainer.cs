@@ -24,6 +24,10 @@ namespace IKGTools.Editor.EasyContainer
         {
             _containerIndex = 0;
             Register(this);
+            
+            var eventsHelper = CreateAndRegister<ContainerEventsService>();
+            eventsHelper.OnTick += OnTick;
+            eventsHelper.OnTickSceneGUI += OnTickSceneGUI;
         }
 
         private DIContainer(DIContainer parent)

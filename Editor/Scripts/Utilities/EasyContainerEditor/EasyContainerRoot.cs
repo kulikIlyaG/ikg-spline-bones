@@ -9,8 +9,6 @@ namespace IKGTools.Editor.EasyContainer
         public static void Initialize(IReadOnlyList<BaseInstaller> installers)
         {
             _rootContainer = new DIContainer();
-
-            _rootContainer.CreateAndRegister<ContainerEventsService>();
             
             foreach (BaseInstaller installer in installers)
                 installer.Install(_rootContainer);
