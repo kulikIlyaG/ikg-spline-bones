@@ -16,7 +16,12 @@ namespace IKGTools.Editor.Services
         public void SetOverlayInstance(IEditorOverlay overlay)
         {
             if (_overlay != null)
-                throw new Exception("Override overlay! Something wrong!");
+            {
+                _overlay.OnClickEditSpline -= OnClickEditSplineInvoke;
+                _overlay.OnClickEditRig -= OnClickEditRigInvoke;
+                _overlay.OnClickAddBone -= OnClickAddBoneInvoke;
+                _overlay.OnClickRemoveBone -= OnClickRemoveBoneInvoke;
+            }
 
             _overlay = overlay;
             _overlay.OnClickEditSpline += OnClickEditSplineInvoke;
