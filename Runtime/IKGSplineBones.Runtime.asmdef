@@ -1,5 +1,5 @@
 {
-    "name": "Runtime",
+    "name": "IKGSplineBones.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:caccfbdb442cdc64fa722b4c5585521f"

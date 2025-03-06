@@ -1,5 +1,5 @@
 {
-    "name": "Editor",
+    "name": "IKGSplineBones.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:5f95a0c690dfa4010b8679431961aeb9",
