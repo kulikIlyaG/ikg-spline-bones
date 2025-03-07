@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace IKGTools.SplineBones.Editor.Services
 {
-    internal sealed class EditorActivitiCycleEventsService : IInitializable
+    internal sealed class EditorActivityCycleEventsService : IInitializable
     {
         private readonly EditorDataService _dataService;
         
@@ -15,7 +15,7 @@ namespace IKGTools.SplineBones.Editor.Services
         internal event Action OnDisabledEditor;
         
 
-        public EditorActivitiCycleEventsService(EditorDataService dataService)
+        public EditorActivityCycleEventsService(EditorDataService dataService)
         {
             _dataService = dataService;
             

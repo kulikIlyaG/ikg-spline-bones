@@ -1,3 +1,4 @@
+using Editor.Scripts.Services;
 using IKGTools.Editor.EasyStateMachine;
 using IKGTools.SplineBones.Editor.Services;
 using IKGTools.SplineBones.Editor.Services.States;
@@ -7,19 +8,23 @@ namespace IKGTools.Editor.Services.States
     internal sealed class EmptyEditorState : EditorEasyState
     {
         private readonly EditorOverlayService _overlayService;
-        private readonly EditorActivitiCycleEventsService _activitiCycleEvents;
+        private readonly EditorActivityCycleEventsService _activityCycleEvents;
+
+        private readonly DrawObjectsInfoService _drawObjectsInfoService;
         
         public EmptyEditorState(EditorOverlayService overlayService
-            , EditorActivitiCycleEventsService activitiCycleEvents
+            , EditorActivityCycleEventsService activityCycleEvents,
+            DrawObjectsInfoService drawObjectsInfoService
             , IStateMachine stateMachine) : base(stateMachine)
         {
             _overlayService = overlayService;
-            _activitiCycleEvents = activitiCycleEvents;
+            _activityCycleEvents = activityCycleEvents;
+            _drawObjectsInfoService = drawObjectsInfoService;
         }
 
         protected override void OnEnter(EasyState enterFrom)
         {
-            _activitiCycleEvents.OnDisabledEditor += GoToDisabledState;
+            _activityCycleEvents.OnDisabledEditor += GoToDisabledState;
             
             _overlayService.OnClickEditRig += GoToEditRigState;
             _overlayService.OnClickEditSpline += GoToEditSplineState;
@@ -28,6 +33,7 @@ namespace IKGTools.Editor.Services.States
             
             _overlayService.ResetActiveButtons();
             _overlayService.ShowOverlay();
+            _drawObjectsInfoService.Show();
         }
         
         private void GoToDisabledState()
@@ -47,7 +53,7 @@ namespace IKGTools.Editor.Services.States
 
         protected override void OnExit(EasyState exitTo)
         {
-            _activitiCycleEvents.OnDisabledEditor -= GoToDisabledState;
+            _activityCycleEvents.OnDisabledEditor -= GoToDisabledState;
             
             _overlayService.OnClickEditRig -= GoToEditRigState;
             _overlayService.OnClickEditSpline -= GoToEditSplineState;

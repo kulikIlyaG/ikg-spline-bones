@@ -1,4 +1,3 @@
-using IKGTools.SplineBones;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -27,8 +26,6 @@ namespace IKGTools.SplineBones.Editor
             _pointStyle.normal.textColor = POINT_LABEL_COLOR;
             
             ValidateBoneStyles();
-
-            SceneView.duringSceneGui += OnUpdatedSceneGUI;
         }
         
         private void ValidateBoneStyles()
@@ -46,21 +43,8 @@ namespace IKGTools.SplineBones.Editor
                 }
             }
         }
-
-        public void Dispose()
-        {
-            SceneView.duringSceneGui -= OnUpdatedSceneGUI;
-        }
-
-        private void OnUpdatedSceneGUI(SceneView obj)
-        {
-            if(Application.isPlaying)
-                return;
-            
-            Draw();
-        }
-
-        private void Draw()
+        
+        public void Draw()
         {
             var bones = _skeleton.Bones;
             if (bones is {Length: > 0})

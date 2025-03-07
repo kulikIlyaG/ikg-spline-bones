@@ -1,4 +1,5 @@
 using System;
+using Editor.Scripts.Services;
 using IKGTools.Editor.EasyContainer;
 using IKGTools.Editor.Services;
 using IKGTools.SplineBones;
@@ -17,7 +18,7 @@ namespace IKGTools.Editor
         private static EditorStateMachineService _stateMachine;
         private static EditorOverlayService _overlayService;
 
-        private static EditorActivitiCycleEventsService _activitiCycleEvents;
+        private static EditorActivityCycleEventsService _activityCycleEvents;
         private static EditorDataService _dataService;
 
         private static bool _isEditModeSelected;
@@ -52,7 +53,7 @@ namespace IKGTools.Editor
             _stateMachine = EasyContainerRoot.Resolve<EditorStateMachineService>();
             _overlayService = EasyContainerRoot.Resolve<EditorOverlayService>();
             _dataService = EasyContainerRoot.Resolve<EditorDataService>();
-            _activitiCycleEvents = EasyContainerRoot.Resolve<EditorActivitiCycleEventsService>();
+            _activityCycleEvents = EasyContainerRoot.Resolve<EditorActivityCycleEventsService>();
         }
 
         private sealed class MainInstaller : BaseInstaller
@@ -64,13 +65,14 @@ namespace IKGTools.Editor
                 container.CreateAndRegister<EditorDataService>();
                 container.CreateAndRegister<ManageBonesService>();
                 
-                container.CreateAndRegister<EditorActivitiCycleEventsService>();
+                container.CreateAndRegister<EditorActivityCycleEventsService>();
                 container.CreateAndRegister<EditorOverlayService>();
 
                 container.CreateAndRegister<SceneBannerService>();
                 container.CreateAndRegister<RigEditorContextMenuService>();
                 
                 container.CreateAndRegister<EditorStateMachineService>();
+                container.CreateAndRegister<DrawObjectsInfoService>();
             }
         }
 
@@ -99,7 +101,7 @@ namespace IKGTools.Editor
 
         public static void TryStartEdit()
         {
-            _activitiCycleEvents.TryStartEdit();
+            _activityCycleEvents.TryStartEdit();
         }
     }
 }

@@ -39,15 +39,15 @@ namespace IKGTools.SplineBones.Editor.Services
         private readonly EditorDataService _data;
 
         private readonly EasyStateMachine<EditorEasyState> _stateMachine;
-        private readonly EditorActivitiCycleEventsService _activitiCycleEvents;
+        private readonly EditorActivityCycleEventsService _activityCycleEvents;
 
-        public EditorStateMachineService(EditorDataService data, EditorActivitiCycleEventsService activitiCycleEvents, DIContainer rootContainer)
+        public EditorStateMachineService(EditorDataService data, EditorActivityCycleEventsService activityCycleEvents, DIContainer rootContainer)
         {
             _data = data;
-            _activitiCycleEvents = activitiCycleEvents;
+            _activityCycleEvents = activityCycleEvents;
 
             _stateMachine = new EasyStateMachine<EditorEasyState>(rootContainer, new EditorStatesInstaller());
-            _activitiCycleEvents.OnDisabledEditor += OnDisabledEditor;
+            _activityCycleEvents.OnDisabledEditor += OnDisabledEditor;
         }
 
         private void OnDisabledEditor()
@@ -57,7 +57,7 @@ namespace IKGTools.SplineBones.Editor.Services
 
         public void Initialize()
         {
-            Type startStateType = _activitiCycleEvents.IsEditorEnabled
+            Type startStateType = _activityCycleEvents.IsEditorEnabled
                 ? typeof(EmptyEditorState)
                 : typeof(DisabledEditorState);
             _stateMachine.Start(startStateType);

@@ -1,3 +1,4 @@
+using Editor.Scripts.Services;
 using IKGTools.Editor.EasyStateMachine;
 using IKGTools.Editor.Services.States;
 using IKGTools.SplineBones.Editor.Services;
@@ -8,23 +9,29 @@ namespace IKGTools.Editor.Services
     internal sealed class DisabledEditorState : EditorEasyState
     {
         private readonly EditorOverlayService _overlayService;
-        private readonly EditorActivitiCycleEventsService _activitiCycleEvents;
+        private readonly EditorActivityCycleEventsService _activityCycleEvents;
+
+        private readonly DrawObjectsInfoService _drawObjectsInfoService;
         
         public DisabledEditorState(EditorOverlayService overlayService
-            , EditorActivitiCycleEventsService activitiCycleEvents
+            , EditorActivityCycleEventsService activityCycleEvents,
+            DrawObjectsInfoService drawObjectsInfoService
             , IStateMachine stateMachine) : base(stateMachine)
         {
             _overlayService = overlayService;
-            _activitiCycleEvents = activitiCycleEvents;
+            _activityCycleEvents = activityCycleEvents;
+            _drawObjectsInfoService = drawObjectsInfoService;
         }
 
         protected override void OnEnter(EasyState enterFrom)
         {
-            _activitiCycleEvents.OnEnabledEditor += OnEnabledEditor;
+            _activityCycleEvents.OnEnabledEditor += OnEnabledEditor;
             
             SplineBonesEditorRoot.SetEnabledEditMode(false);
             
             _overlayService.HideOverlay();
+            
+            _drawObjectsInfoService.Hide();
         }
 
 
@@ -35,7 +42,7 @@ namespace IKGTools.Editor.Services
 
         protected override void OnExit(EasyState exitTo)
         {
-            _activitiCycleEvents.OnEnabledEditor -= OnEnabledEditor;
+            _activityCycleEvents.OnEnabledEditor -= OnEnabledEditor;
         }
 
         protected override void OnCloseMachine()
