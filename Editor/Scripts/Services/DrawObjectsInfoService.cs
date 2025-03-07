@@ -19,23 +19,19 @@ namespace Editor.Scripts.Services
 
         public void Show()
         {
-            _show = true;
             _drawer = new BoneAndSplineInfoDrawer(_data.Component.Skeleton, _data.Component.BindingsData,
                 _data.Component.Spline);
         }
 
         public void Hide()
         {
-            _show = false;
             _drawer = null;
         }
 
         public void TickSceneGUI(SceneView sceneView)
         {
-            if(_show)
-                return;
-            
-            _drawer.Draw();
+            if(_drawer != null)
+                _drawer.Draw();
         }
     }
 }

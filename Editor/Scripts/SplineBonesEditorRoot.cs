@@ -65,6 +65,8 @@ namespace IKGTools.Editor
                 container.CreateAndRegister<EditorDataService>();
                 container.CreateAndRegister<ManageBonesService>();
                 
+                container.CreateAndRegister<DrawObjectsInfoService>();
+                
                 container.CreateAndRegister<EditorActivityCycleEventsService>();
                 container.CreateAndRegister<EditorOverlayService>();
 
@@ -72,7 +74,6 @@ namespace IKGTools.Editor
                 container.CreateAndRegister<RigEditorContextMenuService>();
                 
                 container.CreateAndRegister<EditorStateMachineService>();
-                container.CreateAndRegister<DrawObjectsInfoService>();
             }
         }
 

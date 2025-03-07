@@ -13,10 +13,12 @@ namespace IKGTools.Editor.Services
 
         private readonly DrawObjectsInfoService _drawObjectsInfoService;
         
-        public DisabledEditorState(EditorOverlayService overlayService
-            , EditorActivityCycleEventsService activityCycleEvents,
-            DrawObjectsInfoService drawObjectsInfoService
-            , IStateMachine stateMachine) : base(stateMachine)
+        public DisabledEditorState(
+            EditorOverlayService overlayService,
+            EditorActivityCycleEventsService activityCycleEvents,
+            DrawObjectsInfoService drawObjectsInfoService,
+            IStateMachine stateMachine)
+            : base(stateMachine)
         {
             _overlayService = overlayService;
             _activityCycleEvents = activityCycleEvents;

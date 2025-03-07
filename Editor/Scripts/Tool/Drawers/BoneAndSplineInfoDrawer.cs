@@ -6,8 +6,7 @@ namespace IKGTools.SplineBones.Editor
 {
     internal sealed class BoneAndSplineInfoDrawer
     {
-        private static readonly Color32 BONE_LABEL_COLOR = new Color32(255, 82, 125, 255);
-        private static readonly Color32 POINT_LABEL_COLOR = new Color32(112, 86, 255, 255);
+        private static readonly Color32 POINT_LABEL_COLOR = new Color32(255, 61, 160, 255);
         
         private readonly SkeletonComponent _skeleton;
         private readonly SplineBindingsData _bindingsData;
@@ -22,8 +21,10 @@ namespace IKGTools.SplineBones.Editor
             _bindingsData = bindingsData;
             _spline = spline;
             
-            _pointStyle = new GUIStyle(EditorStyles.miniBoldLabel);
+            _pointStyle = new GUIStyle();
             _pointStyle.normal.textColor = POINT_LABEL_COLOR;
+            _pointStyle.alignment = TextAnchor.LowerLeft;
+            _pointStyle.fontStyle = FontStyle.Bold;
             
             ValidateBoneStyles();
         }
@@ -36,9 +37,11 @@ namespace IKGTools.SplineBones.Editor
                 _boneStyles = new GUIStyle[colors.Length];
                 for (int index = 0; index < _boneStyles.Length; index++)
                 {
-                    GUIStyle style = new GUIStyle(EditorStyles.miniBoldLabel);
+                    GUIStyle style = new GUIStyle();
                     style.normal.textColor = colors[index];
                     style.normal.background = EditorGUIUtility.whiteTexture;
+                    style.alignment = TextAnchor.UpperRight;
+                    style.fontStyle = FontStyle.Bold;
                     _boneStyles[index] = style;
                 }
             }
