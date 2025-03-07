@@ -79,6 +79,7 @@ namespace IKGTools.SplineBones.Editor
         private void DrawPointsTangents()
         {
             int pointsCount = _spline.GetPointCount();
+            var defaultHandlesColor = Handles.color;
             for (int index = 0; index < pointsCount; index++)
             {
                 if(_skeleton == null)
@@ -94,11 +95,9 @@ namespace IKGTools.SplineBones.Editor
                 Handles.color = new Color(1f, 0.32f, 0.44f);
                 Handles.DrawLine(pointPosition, tangentIn);
                 Handles.DrawLine(pointPosition, tangentOut);
-
-                Handles.color = Color.red;
-                Handles.SphereHandleCap(0, tangentIn, Quaternion.identity, 0.02f, EventType.Repaint);
-                Handles.SphereHandleCap(0, tangentOut, Quaternion.identity, 0.02f, EventType.Repaint);
             }
+
+            Handles.color = defaultHandlesColor;
         }
 
         private void DrawPointsLabels()
