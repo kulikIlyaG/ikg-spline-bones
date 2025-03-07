@@ -84,7 +84,6 @@ namespace IKGTools.Editor.Utilities.UIToolkit
 
             schedule.Execute(() =>
             {
-                Debug.Log("Executed");
                 _label.style.left = -(_label.resolvedStyle.width/2f);
             });
             _label.style.unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Bold);
