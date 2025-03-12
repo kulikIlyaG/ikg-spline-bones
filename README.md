@@ -9,6 +9,8 @@ As a result, you can modify the shape of the spline using a set of GameObjects, 
 Currently, this tool only supports working with **UnityEngine.U2D.Spline**
 In the future, an interface for supporting other spline implementations may be added.
 
+I have prepared a [small set of usage examples](https://github.com/kulikIlyaG/ikg-spline-bones-samples) I hope they will help you learn to use the tool more quickly.
+
 >Why keep it a secret?
 I’ve been thinking about possibly adding support for 3D mesh deformation.
 However, I believe that would be part of a separate tool.
