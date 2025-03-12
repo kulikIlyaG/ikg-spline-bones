@@ -11,7 +11,17 @@ namespace IKGTools.SplineBones.Editor
         {
             foreach (Object obj in Selection.objects)
             {
-                if (obj is Bone bone)
+                if(obj == null)
+                    continue;
+
+                var gameObject = obj as GameObject;
+                
+                if(gameObject == null)
+                    continue;
+                
+                var bone = gameObject.GetComponent<Bone>();
+                
+                if (bone != null)
                 {
                     Vector3 originPosition = bone.Origin.position;
                     Vector3 localDirection = new Vector3(1, 1, 0).normalized;
