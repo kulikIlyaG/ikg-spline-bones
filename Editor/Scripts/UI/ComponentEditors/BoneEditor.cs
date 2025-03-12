@@ -22,27 +22,7 @@ namespace IKGTools.SplineBones.Editor
                 var bone = gameObject.GetComponent<Bone>();
                 
                 if (bone != null)
-                {
-                    Vector3 originPosition = bone.Origin.position;
-                    Vector3 localDirection = new Vector3(1, 1, 0).normalized;
-                    Vector3 worldDirection = bone.Origin.rotation * localDirection;
-
-                    Vector3 sliderPosition = originPosition;
-
-                    EditorGUI.BeginChangeCheck();
-                    Handles.color = Color.magenta;
-
-                    float newLength = Handles.ScaleSlider(
-                        bone.Length, sliderPosition, worldDirection, Quaternion.identity,
-                        HandleUtility.GetHandleSize(sliderPosition), 0.1f);
-
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        Undo.RecordObject(bone, "Change Bone Length");
-                        bone.SetLength(newLength);
-                        EditorUtility.SetDirty(bone);
-                    }
-                }
+                    BoneLengthDrawer.DrawBoneLength(bone);
             }
         }
     }
