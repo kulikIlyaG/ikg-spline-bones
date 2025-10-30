@@ -1,13 +1,13 @@
 {
   "name": "com.ikg.spline-bones",
-  "version": "0.0.1",
+  "version": "0.0.1-preview.1",
   "displayName": "IKG Spline Bones",
-  "description": "Bind Spline point to bones",
+  "description": "Bind Spline point to bones. Source: https://github.com/kulikIlyaG/ikg-spline-bones",
   "unity": "2022.3",
   "hideInEditor": "true",
   "author": {
     "name": "Ilya Kulik",
-    "url": "https://github.com/yourname"
+    "url": "https://github.com/kulikIlyaG"
   },
   "dependencies": {
     "com.unity.2d.spriteshape": "8.0.0"

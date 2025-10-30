@@ -111,3 +111,13 @@ Definitely supported by editor version 2022.3+
 List of **dependencies** at the moment:
 
 * com.unity.2d.spriteshape 8.0.0+
+
+---
+
+  ### Road map :)
+It would be great to implement in the future:
+
+* Optimize spline deformation calculations (JobsSystem)
+* Add support for working with a custom spline implementation
+* Bug fixes (there are definitely some, at least on the editor side)
+* Add more spline-related functions (primitive shape generator, spline import from another source, etc.)
