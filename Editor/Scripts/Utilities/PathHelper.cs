@@ -1,15 +1,29 @@
+using IKGTools.RefsDetective.Utilities;
+
 namespace IKGTools.Editor.Utilities
 {
     internal static class PathHelper
     {
+        private static string _rootFolderPath;
+        
         public static string GetPathFor(string filePath)
         {
-            return $"Packages/com.ikg.spline-bones/Editor/EditorResources/{filePath}";
+            return $"{GetRootPath()}/Editor/EditorResources/{filePath}";
         }
 
         public static string GetPathForEditorTexture(string texturePath)
         {
             return GetPathFor($"Textures/{texturePath}");
+        }
+        
+        private static string GetRootPath()
+        {
+            if (string.IsNullOrEmpty(_rootFolderPath))
+            {
+                _rootFolderPath = RootFolderPathDetector.GetRootFolderPath();
+            }
+            
+            return _rootFolderPath;
         }
 
         internal static class Keys
